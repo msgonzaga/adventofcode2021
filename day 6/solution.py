@@ -1,7 +1,9 @@
 import numpy as np
 
+
 def solution(input_data):
-    input_data = np.array([int(fish) for fish in input_data.strip().split(',')], dtype=np.int)
+    input_data = np.array(
+        [int(fish) for fish in input_data.strip().split(',')], dtype=np.int)
     unique_fish = np.unique(input_data)
     fish_tank = []
     for fish in unique_fish:
@@ -26,11 +28,12 @@ def solution(input_data):
         new_fish_tank = []
         for timer in timers:
             new_group = {'timer': timer}
-            amount = sum([g['amount'] for g in fish_tank if g['timer'] == timer])
+            amount = sum([g['amount']
+                         for g in fish_tank if g['timer'] == timer])
             new_group['amount'] = amount
             new_fish_tank.append(new_group)
         fish_tank = new_fish_tank
-    
+
     return sum([g['amount'] for g in fish_tank])
 
 
@@ -41,5 +44,5 @@ if __name__ == '__main__':
 
     with open('input.txt') as f:
         input_data = f.read()
-    
+
     print(solution(input_data))

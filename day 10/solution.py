@@ -20,6 +20,7 @@ COMPLETE_SCORE = {
     '>': 4
 }
 
+
 def solution(input_data):
     lines = input_data.strip().split('\n')
     error_score = 0
@@ -45,8 +46,9 @@ def solution(input_data):
             for c in completion_string:
                 completion_score = (completion_score * 5) + COMPLETE_SCORE[c]
             completion_scores.append(completion_score)
-    
-    final_completion_score = sorted(completion_scores)[(len(completion_scores)//2)]
+
+    final_completion_score = sorted(completion_scores)[
+        (len(completion_scores)//2)]
 
     return error_score, final_completion_score
 
@@ -68,4 +70,4 @@ if __name__ == '__main__':
     with open('input.txt') as f:
         input_data = f.read()
 
-    print(solution(input_data)) 
+    print(solution(input_data))

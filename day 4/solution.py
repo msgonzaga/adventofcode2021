@@ -25,11 +25,13 @@ def parse_bingo_input(text):
 
     for i in range(2, len(text[2:]), 6):
         new_board = text[i:i+5]
-        new_board = np.array([r.lstrip(' ').replace('  ', ' ').split(' ') for r in new_board])
+        new_board = np.array([r.lstrip(' ').replace(
+            '  ', ' ').split(' ') for r in new_board])
         assert new_board.shape == (5, 5)
         boards.append(new_board)
-    
+
     return called_numbers, boards
+
 
 def solution(input):
     called_numbers, boards = parse_bingo_input(input)
@@ -37,9 +39,9 @@ def solution(input):
     bitmaps = []
     for board in boards:
         bitmaps.append(np.zeros_like(board, dtype=np.int))
-    
+
     winners = [0]*len(boards)
-    
+
     last_winner_found = False
     for number in called_numbers:
         for i, board in enumerate(boards):
@@ -58,7 +60,7 @@ def solution(input):
                         break
         if last_winner_found:
             break
-    
+
     return score_board(board, bitmaps[i], number)
 
 
@@ -83,10 +85,10 @@ if __name__ == '__main__':
 18  8 23 26 20
 22 11 13  6  5
  2  0 12  3  7"""
-    
+
     print(solution(example))
 
     with open('input.txt') as f:
         input = f.read()
-    
+
     print(solution(input))

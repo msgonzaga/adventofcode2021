@@ -35,7 +35,7 @@ def apply_hor_ver_lines(lines, bitmap):
 
         if x1 > x2:
             x1, x2 = x2, x1
-        
+
         if y1 > y2:
             y1, y2 = y2, y1
 
@@ -63,7 +63,7 @@ def apply_diag_lines(lines, bitmap):
         for x in range(x1, x2+1):
             y = linear_interp(x, (x1, y1), (x2, y2))
             bitmap[y, x] += 1
-    
+
     return bitmap
 
 
@@ -76,7 +76,7 @@ def solution(input_data):
     ver_hor_lines, diag_lines = sep_ver_hor_diag_lines(input_data)
     bitmap = apply_hor_ver_lines(ver_hor_lines, bitmap)
     bitmap = apply_diag_lines(diag_lines, bitmap)
-    
+
     return len(bitmap[bitmap >= 2])
 
 
@@ -96,5 +96,5 @@ if __name__ == '__main__':
 
     with open('input.txt') as f:
         input_data = f.read()
-    
+
     print(solution(input_data))

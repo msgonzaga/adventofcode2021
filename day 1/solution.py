@@ -1,9 +1,11 @@
 import numpy as np
 
+
 def solution(input):
     diff = np.diff(input)
     answer = np.sum(diff > 0)
     return answer
+
 
 def apply_sum_window(input, window_len=3):
     cur_idx = 0
@@ -23,8 +25,7 @@ if __name__ == '__main__':
     with open('input.txt') as f:
         input = f.readlines()
         input = np.array(input).astype(np.int)
-    
+
     sum_window_input = apply_sum_window(input)
 
     print(solution(sum_window_input))
-    

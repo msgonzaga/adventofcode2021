@@ -12,10 +12,10 @@ def solution_second_part(input_data):
     max_position = np.max(input_data)
     position_fuel = np.zeros(max_position)
     for i in range(max_position):
-        position_fuel[i] = np.sum([sum(range(0, abs(p - i) + 1)) for p in input_data])
-    
-    return np.min(position_fuel)
+        position_fuel[i] = np.sum(
+            [sum(range(0, abs(p - i) + 1)) for p in input_data])
 
+    return np.min(position_fuel)
 
 
 if __name__ == "__main__":
@@ -26,6 +26,5 @@ if __name__ == "__main__":
 
     with open('input.txt') as f:
         input_data = f.read()
-    
-    print(solution_second_part(input_data))
 
+    print(solution_second_part(input_data))

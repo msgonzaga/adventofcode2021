@@ -24,44 +24,47 @@ DIGITS = {
 
 SEGMENTS = list('abcdefg')
 
+
 def decipher_pattern(patterns):
-    unique_segment_nums = sorted(list(set([l for l in patterns if len(l) in UNIQUE_SEGMENTS_NUMBERS.keys()])), key=lambda x: len(x))
+    unique_segment_nums = sorted(list(set([l for l in patterns if len(
+        l) in UNIQUE_SEGMENTS_NUMBERS.keys()])), key=lambda x: len(x))
     unique_digits_order = [1, 7, 4, 8]
 
     solution_map = np.zeros(shape=(7, len(SEGMENTS)))
 
     for idx, digit in enumerate(unique_digits_order[:-1]):
         digit_map = unique_segment_nums[idx]
-        digit_segments = DIGITS[digit] 
+        digit_segments = DIGITS[digit]
         for c in digit_map:
             letter_idx = SEGMENTS.index(c)
             for idx, bit in enumerate(digit_segments):
                 if bit:
                     solution_map[idx, letter_idx] += 1
-    
+
     for letter in SEGMENTS:
         max_count = np.max(solution_map[:, SEGMENTS.index(letter)])
         update_indexes = solution_map[:, SEGMENTS.index(letter)] != max_count
         solution_map[:, SEGMENTS.index(letter)][update_indexes] = 0
-    
+
     for i in range(7):
         max_count = np.max(solution_map[i, :])
         update_indexes = solution_map[i, :] != max_count
         solution_map[i, :][update_indexes] = 0
-    
+
     uncertain_segments = np.sum(solution_map, axis=0) > 1
-    uncertain_segments = [SEGMENTS[i] for i in range(len(uncertain_segments)) if uncertain_segments[i]]
+    uncertain_segments = [SEGMENTS[i] for i in range(
+        len(uncertain_segments)) if uncertain_segments[i]]
 
     unsolved_patterns = [p for p in patterns if p not in unique_segment_nums]
-    
+
     for pattern in unsolved_patterns:
         if len(set(pattern) & set(uncertain_segments)) == len(uncertain_segments):
             number_9 = pattern
-    
+
     for seg in number_9:
         if np.sum(solution_map[:, SEGMENTS.index(seg)]) == 0:
             solution_map[3, SEGMENTS.index(seg)] += 1
-    
+
     unsolved_patterns = [p for p in unsolved_patterns if p != number_9]
 
     # remaining digits: 2, 3, 5, 6, 0
@@ -73,22 +76,26 @@ def decipher_pattern(patterns):
     l_pair = ''.join([c for c in number_4 if c not in number_1])
 
     number_6_or_0 = [p for p in unsolved_patterns if len(p) == 6]
-    number_3_or_0 = [p for p in unsolved_patterns if len(set(p) & set(l_pair)) == 1 and len(set(p) & set(ver_pair)) == 2]
+    number_3_or_0 = [p for p in unsolved_patterns if len(
+        set(p) & set(l_pair)) == 1 and len(set(p) & set(ver_pair)) == 2]
 
     number_0 = list(set(number_3_or_0) & set(number_6_or_0))[0]
     number_6 = [n for n in number_6_or_0 if n != number_0][0]
     number_3 = [n for n in number_3_or_0 if n != number_0][0]
 
-    unsolved_patterns = [p for p in unsolved_patterns if p not in [number_0, number_3, number_6]]
+    unsolved_patterns = [p for p in unsolved_patterns if p not in [
+        number_0, number_3, number_6]]
 
-    number_2 = [p for p in unsolved_patterns if len(set(p) & set(l_pair)) == 1 and len(set(p) & set(ver_pair)) == 1][0]
-    number_5 = [p for p in unsolved_patterns if len(set(p) & set(l_pair)) == 2 and len(set(p) & set(ver_pair)) == 1][0]
+    number_2 = [p for p in unsolved_patterns if len(
+        set(p) & set(l_pair)) == 1 and len(set(p) & set(ver_pair)) == 1][0]
+    number_5 = [p for p in unsolved_patterns if len(
+        set(p) & set(l_pair)) == 2 and len(set(p) & set(ver_pair)) == 1][0]
 
     # compare 2 and 5 to find 5
     for seg in l_pair:
         if seg not in number_2 and seg in number_5:
             solution_map[5, SEGMENTS.index(seg)] += 1
-    
+
     # compare 5 and 6 to find 4
     segment_4 = list(set(number_6) - set(number_5))[0]
     solution_map[4, SEGMENTS.index(segment_4)] += 1
@@ -102,12 +109,12 @@ def decipher_pattern(patterns):
         max_count = np.max(solution_map[:, SEGMENTS.index(letter)])
         update_indexes = solution_map[:, SEGMENTS.index(letter)] != max_count
         solution_map[:, SEGMENTS.index(letter)][update_indexes] = 0
-    
+
     for i in range(7):
         max_count = np.max(solution_map[i, :])
         update_indexes = solution_map[i, :] != max_count
         solution_map[i, :][update_indexes] = 0
-    
+
     return solution_map
 
 
@@ -118,7 +125,7 @@ def translate(pattern, solution_map):
         return 8
 
     for seg in pattern:
-        seg_idx =  SEGMENTS.index(seg)
+        seg_idx = SEGMENTS.index(seg)
         seg_position = np.argmax(solution_map[:, seg_idx])
         translated_digit[seg_position] = 1
 
@@ -129,7 +136,9 @@ def translate(pattern, solution_map):
 
 def solution(input_data):
     input_data = input_data.strip().split('\n')
-    split_values = lambda inp: (inp[0].strip().split(' '), inp[1].strip().split(' '))
+
+    def split_values(inp): return (
+        inp[0].strip().split(' '), inp[1].strip().split(' '))
     input_data = [split_values(inp.split('|')) for inp in input_data]
 
     result = 0
@@ -140,9 +149,9 @@ def solution(input_data):
             output.append(translate(pattern, solution_map))
         number = int(''.join([str(n) for n in output]))
         result += number
-    
+
     return result
-    
+
 
 if __name__ == '__main__':
     example = """be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
@@ -160,5 +169,5 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
 
     with open('input.txt') as f:
         input_data = f.read()
-    
+
     print(solution(input_data))
