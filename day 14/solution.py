@@ -14,7 +14,7 @@ def solution(input_data, steps=10):
     template, rules = parse_input(input_data)
 
     polymer = template
-    pairs = Counter({polymer[i:i + 2]: 1 for i in range(len(polymer) - 1)})
+    pairs = Counter([polymer[i:i + 2] for i in range(len(polymer) - 1)])
     first_letter = template[0]
 
     for _ in range(steps):
